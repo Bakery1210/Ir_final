@@ -35,7 +35,7 @@ echo "  ✅ Đã cài xong dependencies"
 # 4. Tải model embedding
 echo "[4/4] Tải model keepitreal/vietnamese-sbert..."
 if [ -d "models/vietnamese-sbert" ]; then
-    echo "  ⏩ Model đã có sẵn, bỏ qua"
+    echo "  ⏩ Model sbert đã có sẵn, bỏ qua"
 else
     python3 -c "
 from sentence_transformers import SentenceTransformer
@@ -48,6 +48,22 @@ print('  ✅ Đã lưu model vào models/vietnamese-sbert')
 # Quick test
 test = model.encode(['Test'])
 print(f'  ✅ Model test OK - embedding dim: {test.shape[1]}')
+"
+fi
+
+# 5. Tải model E5-Large (Backup)
+echo "[5/5] Tải model backup intfloat/multilingual-e5-large (~1.2GB)..."
+if [ -d "models/multilingual-e5-large" ]; then
+    echo "  ⏩ Model E5-Large đã có sẵn, bỏ qua"
+else
+    python3 -c "
+from sentence_transformers import SentenceTransformer
+import os
+print('  Đang tải E5-Large từ HuggingFace (Có thể mất 5-10 phút)...')
+model = SentenceTransformer('intfloat/multilingual-e5-large')
+os.makedirs('models/multilingual-e5-large', exist_ok=True)
+model.save('models/multilingual-e5-large')
+print('  ✅ Đã lưu model vào models/multilingual-e5-large')
 "
 fi
 

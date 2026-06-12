@@ -132,28 +132,11 @@ Script sẽ tự động:
 1. Tạo `.venv/`
 2. Cài dependencies từ `requirements.txt`
 3. Tải model `vietnamese-sbert` → `models/vietnamese-sbert/`
+4. Tải model backup `E5-Large` (~1.2GB) → `models/multilingual-e5-large/` (Bắt buộc tải lúc này vì sau đó sẽ ngắt Internet)
 
-⏱️ **Khoảng 3-5 phút**
+⏱️ **Khoảng 5-10 phút** (tùy tốc độ mạng khi tải model)
 
-#### Bước 1.4: Tải các model phụ (BẮT BUỘC TRƯỚC KHI MẤT INTERNET)
-
-> [!WARNING]
-> Vì phần sau của kỳ thi sẽ **HOÀN TOÀN KHÔNG CÓ INTERNET**, bạn bắt buộc phải tải trước tất cả model ngay bây giờ. Đặc biệt là `E5-Large` dùng cho `student_server_v2.py`.
-
-Chạy lệnh sau để tải model E5-Large (~1.2GB):
-```bash
-source .venv/bin/activate
-python3 -c "
-from sentence_transformers import SentenceTransformer
-print('Đang tải E5-Large...')
-model = SentenceTransformer('intfloat/multilingual-e5-large')
-model.save('models/multilingual-e5-large')
-print('Tải xong E5-Large!')
-"
-```
-*(Quá trình này mất khoảng 5-10 phút tùy mạng)*
-
-#### Bước 1.5: Kiểm tra setup thành công
+#### Bước 1.4: Kiểm tra setup thành công
 
 ```bash
 source .venv/bin/activate
