@@ -135,7 +135,25 @@ Script sẽ tự động:
 
 ⏱️ **Khoảng 3-5 phút**
 
-#### Bước 1.4: Kiểm tra setup thành công
+#### Bước 1.4: Tải các model phụ (BẮT BUỘC TRƯỚC KHI MẤT INTERNET)
+
+> [!WARNING]
+> Vì phần sau của kỳ thi sẽ **HOÀN TOÀN KHÔNG CÓ INTERNET**, bạn bắt buộc phải tải trước tất cả model ngay bây giờ. Đặc biệt là `E5-Large` dùng cho `student_server_v2.py`.
+
+Chạy lệnh sau để tải model E5-Large (~1.2GB):
+```bash
+source .venv/bin/activate
+python3 -c "
+from sentence_transformers import SentenceTransformer
+print('Đang tải E5-Large...')
+model = SentenceTransformer('intfloat/multilingual-e5-large')
+model.save('models/multilingual-e5-large')
+print('Tải xong E5-Large!')
+"
+```
+*(Quá trình này mất khoảng 5-10 phút tùy mạng)*
+
+#### Bước 1.5: Kiểm tra setup thành công
 
 ```bash
 source .venv/bin/activate
@@ -150,9 +168,8 @@ Phải thấy: `OK! dim=768`
 
 #### Bước 2.1: Chuyển sang WiFi ASUS_E0
 
-- Disconnect WiFi Internet
-- Connect WiFi **ASUS_E0**
-- Hoặc nếu máy có LAN + WiFi: cắm LAN cho ASUS_E0, giữ WiFi Internet
+- **Disconnect WiFi Internet** (Yêu cầu bắt buộc: sau khi setup xong không được kết nối internet nữa)
+- Connect WiFi **ASUS_E0** (Chỉ truy cập mạng nội bộ LAN của Giáo viên)
 
 #### Bước 2.2: Kiểm tra kết nối
 
@@ -317,8 +334,7 @@ python3 student_server.py
 ```bash
 # Terminal 1: Ctrl+C tắt server cũ
 python3 student_server_v2.py
-# → Lần đầu sẽ tải model E5-Large (~1.2GB) — CẦN INTERNET
-# → Hoặc nếu đã tải trước thì load từ models/multilingual-e5-large/
+# → Model đã được tải từ Bước 1.4 (Load từ models/multilingual-e5-large/)
 
 # Terminal 2:
 python3 run_competition.py
@@ -326,7 +342,7 @@ python3 run_competition.py
 ```
 
 > [!WARNING]
-> Server v2 dùng **vector DB riêng** (`vector_db_v2/`), nên lần đầu chạy v2 phải chọn **1** (upload lại). Model E5-Large cần internet để tải nếu chưa có.
+> Server v2 dùng **vector DB riêng** (`vector_db_v2/`), nên lần đầu chạy v2 phải chọn **1** (upload lại). Bạn phải chắc chắn đã tải model E5-Large ở Bước 1.4 vì bây giờ máy không còn Internet để tải.
 
 ---
 
