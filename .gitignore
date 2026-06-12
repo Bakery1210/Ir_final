@@ -1,0 +1,20 @@
+# Virtual Environment
+.venv/
+
+# Model files (tải lại bằng setup.sh)
+models/
+
+# Vector DB (tạo lại khi chạy)
+vector_db/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/

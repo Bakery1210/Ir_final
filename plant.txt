@@ -1,0 +1,41 @@
+1. Tối ưu hóa Dữ liệu và Chia nhỏ (Chunking & Indexing)
+Chiến lược Chunking: Độ chính xác của RAG phụ thuộc tới 80% vào chiến lược chunking
+. Nên dùng Semantic chunking (cắt theo ngữ nghĩa/chủ đề) hoặc Recursive chunking thay vì cắt cố định (Fixed-size) để tránh làm đứt gãy câu
+. Kích thước lý tưởng cho RAG là 200-500 tokens, với độ gối đầu (overlap) 10-20%
+.
+Small-to-Big Retrieval (Parent-Child Indexing): Sử dụng các chunk nhỏ (Child) để tìm kiếm nhằm đạt độ chính xác cao, nhưng khi đưa vào LLM thì gửi toàn bộ đoạn văn lớn (Parent) chứa chunk đó để model có đầy đủ ngữ cảnh
+.
+Xử lý bảng biểu: Đối với dữ liệu bảng, thay vì giữ nguyên dạng lưới, hãy biến từng dòng thành câu văn tự nhiên (Row to Text) hoặc dùng LLM để tóm tắt ý chính của bảng rồi lấy vector đại diện cho đoạn tóm tắt đó
+.
+Pre-filtering bằng Metadata: Gắn thẻ metadata (như ngày tháng, loại tài liệu, quyền truy cập) để lọc dữ liệu trước khi chạy thuật toán vector. Điều này giúp loại bỏ nhiễu và thu hẹp không gian tìm kiếm, tăng độ chính xác tuyệt đối
+.
+2. Tối ưu hóa Truy vấn (Query Processing & Transformation) Vì người dùng thường đặt câu hỏi mơ hồ, cụt lủn hoặc dùng từ ngữ khác với tài liệu gốc, bạn cần dùng một LLM nhỏ (như GPT-4o-mini, Gemini Flash) làm màng lọc để biến đổi câu hỏi trước khi tìm kiếm
+:
+Query Expansion: Mở rộng từ khóa, thêm từ đồng nghĩa hoặc sửa lỗi chính tả
+.
+Query Decomposition: Chia nhỏ các câu hỏi phức tạp (Multi-hop) thành nhiều câu hỏi đơn giản để tìm kiếm song song
+.
+Step-Back Prompting: Sinh ra một câu hỏi mang tính trừu tượng/tổng quát hơn để lấy được ngữ cảnh quy tắc chung trước khi giải quyết ca cụ thể
+.
+HyDE (Hypothetical Document Embeddings): Dùng LLM sinh ra một "câu trả lời giả định", sau đó dùng vector của câu trả lời giả định này để tìm kiếm tài liệu thật trong DB, giúp rút ngắn khoảng cách ngữ nghĩa
+.
+3. Nâng cấp Kỹ thuật Truy xuất (Advanced Retrieval)
+Hybrid Search: Thay vì chỉ dùng Vector Search (tìm theo ý nghĩa), hãy kết hợp song song với BM25 Sparse Search (tìm từ khóa chính xác như mã ID, mã số thuế) và hợp nhất kết quả bằng thuật toán RRF (Reciprocal Rank Fusion)
+. Kỹ thuật này có thể giúp độ phủ (Recall) tăng vọt từ 60-78% lên 90-91%
+.
+GraphRAG: Sử dụng Knowledge Graph kết hợp Vector RAG khi câu trả lời cần truy xuất các mối quan hệ đa thực thể (multi-hop, cross-document) thay vì chỉ tìm các đoạn văn bản rời rạc
+.
+4. Lọc và Xếp hạng lại kết quả (Re-ranking & Filtering)
+Kiến trúc 2 giai đoạn (Retrieve-and-Rerank): Dùng Hybrid Search để lấy nhanh danh sách rộng (Top 50-100), sau đó đưa qua một mô hình Cross-encoder (Reranker) để đọc đối chiếu trực tiếp Query và Document, chấm điểm lại và chỉ giữ lại Top 3-5 chính xác nhất cho LLM đọc
+.
+Đa dạng hóa với MMR (Maximum Marginal Relevance): Thuật toán MMR giúp chọn ra các chunk tài liệu vừa liên quan đến câu hỏi, vừa có khoảng cách vector xa nhau nhất để loại bỏ các thông tin trùng lặp (redundancy), tối ưu hóa lượng token đưa vào LLM
+.
+5. Tối ưu hóa Sinh câu trả lời & Tiêm ngữ cảnh (Generation & Context Injection)
+Document Reordering để chống "Lost in the Middle": LLM thường nhớ tốt thông tin ở ĐẦU và CUỐI, nhưng hay quên thông tin nằm ở GIỮA prompt. Hãy sắp xếp lại các chunk theo thứ tự luân phiên, ví dụ: [Tài liệu 1, 3, 5, 4, 2] (tốt nhất ở đầu, tốt nhì ở cuối)
+.
+Strict Grounding (Ép buộc trích dẫn): Trong System Prompt, ra lệnh rõ ràng bắt buộc LLM phải trích dẫn thẻ ID tài liệu (ví dụ: [doc_1]) cho mỗi thông tin đưa ra. Nếu đổi context sai, model cũng phải trả lời sai theo context đó, giúp dễ dàng kiểm tra chéo (audit)
+.
+Dạy AI nói "Tôi không biết" (Graceful Degradation): Thêm quy tắc cấm LLM đoán mò. Nếu ngữ cảnh truy xuất không chứa câu trả lời, model phải từ chối trả lời và có thể gợi ý người dùng cách hỏi khác
+.
+Chain of Thought (CoT): Ép model "suy nghĩ ra nháp" (viết vào thẻ <thought_process>) để so sánh tài liệu, giải quyết mâu thuẫn trước khi đưa ra câu trả lời cuối cùng, đặc biệt hiệu quả với câu hỏi so sánh hoặc suy luận logic
+.
