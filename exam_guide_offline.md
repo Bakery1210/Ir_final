@@ -120,12 +120,13 @@ cd <repo-name>
 #### Bước 1.3: Chạy setup tự động
 
 ```bash
-bash setup.sh
+bash setup.sh (Mac/Linux) hoặc chạy setup.bat (Windows)
 ```
 
 > Nếu lỗi permission:
 > ```bash
 > chmod +x setup.sh && bash setup.sh
+> (Windows thì chỉ cần click đúp setup.bat) (Mac/Linux) hoặc chạy setup.bat (Windows)
 > ```
 
 Script sẽ tự động:
@@ -139,7 +140,7 @@ Script sẽ tự động:
 #### Bước 1.4: Kiểm tra setup thành công
 
 ```bash
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 python -c "from sentence_transformers import SentenceTransformer; m = SentenceTransformer('models/vietnamese-sbert'); print(f'OK! dim={m.get_embedding_dimension()}')"
 ```
 
@@ -173,7 +174,7 @@ Phải thấy response. Nếu không → kiểm tra lại WiFi.
 
 ```bash
 cd <repo-name>
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 python student_server.py
 ```
 
@@ -194,7 +195,7 @@ INFO:     Uvicorn running on http://0.0.0.0:5050
 
 ```bash
 cd <repo-name>
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 python run_competition.py
 ```
 
@@ -305,7 +306,7 @@ Luồng: reset() → evaluate(document_received=True) → get_result()
 # Terminal 1: Ctrl+C để tắt server
 # Sửa code student_server.py (ví dụ: đổi prompt, thay TOP_K, ...)
 # Chạy lại server:
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 python student_server.py
 # → Server tự load lại vector DB từ disk
 
@@ -370,8 +371,8 @@ MMR_LAMBDA = 0.7               # Thử: 0.6, 0.8 (0.6 = đa dạng hơn)
 
 ```bash
 # === SETUP ===
-bash setup.sh                          # Setup tất cả
-source .venv/bin/activate              # Kích hoạt venv
+bash setup.sh (Mac/Linux) hoặc chạy setup.bat (Windows)  # Setup tất cả
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)              # Kích hoạt venv
 
 # === CHẠY SERVER ===
 python student_server.py              # Server v3.0 (vietnamese-sbert)
@@ -399,24 +400,24 @@ curl http://localhost:5050/             # Phải trả JSON status
 ifconfig | grep 192.168                # Tìm IP trên mạng ASUS_E0
 
 # Kiểm tra port
-lsof -i :5050                          # Xem ai đang dùng port 5050
+lsof -i :5050 (Mac) hoặc netstat -ano | findstr :5050 (Windows)                          # Xem ai đang dùng port 5050
 ```
 
 ### Lệnh khẩn cấp
 
 ```bash
 # Port bị chiếm
-lsof -i :5050                          # Tìm PID
-kill -9 <PID>                          # Kill process
+lsof -i :5050 (Mac) hoặc netstat -ano | findstr :5050 (Windows)                          # Tìm PID
+kill -9 <PID> (Mac) hoặc taskkill /F /PID <PID> (Windows)                          # Kill process
 
 # Xóa vector DB để upload lại
-rm -rf vector_db/                      # Xóa DB v1
-rm -rf vector_db_v2/                   # Xóa DB v2
+rm -rf vector_db/ (Mac) hoặc rmdir /s /q vector_db (Windows)                      # Xóa DB v1
+rm -rf vector_db_v2/ (Mac) hoặc rmdir /s /q vector_db_v2 (Windows)                   # Xóa DB v2
 
 # Xóa venv, tạo lại
-rm -rf .venv
+rm -rf .venv (Mac) hoặc rmdir /s /q .venv (Windows)
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 pip install -r requirements.txt
 
 # Tải lại model
@@ -440,7 +441,7 @@ print('Done!')
 ```bash
 # Terminal 1:
 cd <repo-name>
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 python student_server.py
 ```
 
@@ -463,7 +464,7 @@ python student_server.py
 
 **Fix:**
 ```bash
-lsof -i :5050
+lsof -i :5050 (Mac) hoặc netstat -ano | findstr :5050 (Windows)
 # Tìm PID, ví dụ: python  12345
 kill -9 12345
 # Chạy lại server
@@ -478,7 +479,7 @@ python student_server.py
 
 **Fix (cần internet):**
 ```bash
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 python -c "
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('keepitreal/vietnamese-sbert')
@@ -538,7 +539,7 @@ python run_competition.py
 
 **Fix:**
 ```bash
-source .venv/bin/activate
+source .venv/bin/activate (Mac/Linux) hoặc .venv\Scripts\activate (Windows)
 pip install fastapi uvicorn openai sentence-transformers faiss-cpu numpy requests
 ```
 
@@ -578,7 +579,7 @@ Hệ thống lấy **điểm cao nhất** → điểm cuối cùng của bạn l
 ```
 0:00 ─── Kết nối WiFi Internet
 0:01 ─── git clone + cd repo
-0:02 ─── bash setup.sh (chờ 3-5 phút)
+0:02 ─── chạy setup (chờ 3-5 phút)
 0:07 ─── Chuyển WiFi → ASUS_E0
 0:08 ─── [Terminal 1] python student_server.py
 0:09 ─── [Terminal 2] python run_competition.py
