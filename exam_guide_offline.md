@@ -140,7 +140,7 @@ Script sẽ tự động:
 
 ```bash
 source .venv/bin/activate
-python3 -c "from sentence_transformers import SentenceTransformer; m = SentenceTransformer('models/vietnamese-sbert'); print(f'OK! dim={m.get_embedding_dimension()}')"
+python -c "from sentence_transformers import SentenceTransformer; m = SentenceTransformer('models/vietnamese-sbert'); print(f'OK! dim={m.get_embedding_dimension()}')"
 ```
 
 Phải thấy: `OK! dim=768`
@@ -174,7 +174,7 @@ Phải thấy response. Nếu không → kiểm tra lại WiFi.
 ```bash
 cd <repo-name>
 source .venv/bin/activate
-python3 student_server.py
+python student_server.py
 ```
 
 **Phải thấy dòng này:**
@@ -195,7 +195,7 @@ INFO:     Uvicorn running on http://0.0.0.0:5050
 ```bash
 cd <repo-name>
 source .venv/bin/activate
-python3 run_competition.py
+python run_competition.py
 ```
 
 **Menu hiện ra:**
@@ -306,7 +306,7 @@ Luồng: reset() → evaluate(document_received=True) → get_result()
 # Sửa code student_server.py (ví dụ: đổi prompt, thay TOP_K, ...)
 # Chạy lại server:
 source .venv/bin/activate
-python3 student_server.py
+python student_server.py
 # → Server tự load lại vector DB từ disk
 
 # Terminal 2: Chọn 2 (chấm lại, không upload)
@@ -316,11 +316,11 @@ python3 student_server.py
 
 ```bash
 # Terminal 1: Ctrl+C tắt server cũ
-python3 student_server_v2.py
+python student_server_v2.py
 # → Model đã được tải từ Bước 1.4 (Load từ models/multilingual-e5-large/)
 
 # Terminal 2:
-python3 run_competition.py
+python run_competition.py
 # → Chọn 1 (cần upload lại vì vector DB v2 khác dimension)
 ```
 
@@ -374,16 +374,16 @@ bash setup.sh                          # Setup tất cả
 source .venv/bin/activate              # Kích hoạt venv
 
 # === CHẠY SERVER ===
-python3 student_server.py              # Server v3.0 (vietnamese-sbert)
-python3 student_server_v2.py           # Server v3.1 (E5-Large)
+python student_server.py              # Server v3.0 (vietnamese-sbert)
+python student_server_v2.py           # Server v3.1 (E5-Large)
 
 # === CHẠY CLIENT ===
-python3 run_competition.py             # Menu tương tác
-python3 run_competition.py first       # CLI: Đăng ký + evaluate lần đầu
-python3 run_competition.py again       # CLI: Reset + evaluate lại
-python3 run_competition.py result      # CLI: Xem kết quả
-python3 run_competition.py reset       # CLI: Reset trạng thái
-python3 run_competition.py check       # CLI: Kiểm tra hệ thống
+python run_competition.py             # Menu tương tác
+python run_competition.py first       # CLI: Đăng ký + evaluate lần đầu
+python run_competition.py again       # CLI: Reset + evaluate lại
+python run_competition.py result      # CLI: Xem kết quả
+python run_competition.py reset       # CLI: Reset trạng thái
+python run_competition.py check       # CLI: Kiểm tra hệ thống
 ```
 
 ### Lệnh kiểm tra
@@ -415,12 +415,12 @@ rm -rf vector_db_v2/                   # Xóa DB v2
 
 # Xóa venv, tạo lại
 rm -rf .venv
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
 # Tải lại model
-python3 -c "
+python -c "
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('keepitreal/vietnamese-sbert')
 model.save('models/vietnamese-sbert')
@@ -434,14 +434,14 @@ print('Done!')
 
 ### ❌ "Student Server chưa chạy"
 
-**Nguyên nhân:** Chưa chạy `python3 student_server.py` ở Terminal 1
+**Nguyên nhân:** Chưa chạy `python student_server.py` ở Terminal 1
 
 **Fix:**
 ```bash
 # Terminal 1:
 cd <repo-name>
 source .venv/bin/activate
-python3 student_server.py
+python student_server.py
 ```
 
 ---
@@ -464,10 +464,10 @@ python3 student_server.py
 **Fix:**
 ```bash
 lsof -i :5050
-# Tìm PID, ví dụ: python3  12345
+# Tìm PID, ví dụ: python  12345
 kill -9 12345
 # Chạy lại server
-python3 student_server.py
+python student_server.py
 ```
 
 ---
@@ -479,7 +479,7 @@ python3 student_server.py
 **Fix (cần internet):**
 ```bash
 source .venv/bin/activate
-python3 -c "
+python -c "
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('keepitreal/vietnamese-sbert')
 model.save('models/vietnamese-sbert')
@@ -524,11 +524,11 @@ Sau đó tắt server → chạy lại → chọn **1** (upload lại).
 **Fix:**
 ```bash
 # Terminal 1: Sửa code nếu cần, rồi chạy lại
-python3 student_server.py
+python student_server.py
 # → Server tự load lại vector DB từ disk
 
 # Terminal 2:
-python3 run_competition.py
+python run_competition.py
 # → Chọn 2 (chấm lại, không upload)
 ```
 
@@ -566,7 +566,7 @@ Hệ thống lấy **điểm cao nhất** → điểm cuối cùng của bạn l
 
 **Fix:**
 1. Kết nối WiFi ASUS_E0
-2. Tắt client (Ctrl+C) → chạy lại `python3 run_competition.py`
+2. Tắt client (Ctrl+C) → chạy lại `python run_competition.py`
 3. IP sẽ tự detect lại
 
 ---
@@ -580,8 +580,8 @@ Hệ thống lấy **điểm cao nhất** → điểm cuối cùng của bạn l
 0:01 ─── git clone + cd repo
 0:02 ─── bash setup.sh (chờ 3-5 phút)
 0:07 ─── Chuyển WiFi → ASUS_E0
-0:08 ─── [Terminal 1] python3 student_server.py
-0:09 ─── [Terminal 2] python3 run_competition.py
+0:08 ─── [Terminal 1] python student_server.py
+0:09 ─── [Terminal 2] python run_competition.py
 0:09 ─── Chọn 6 (kiểm tra hệ thống)
 0:10 ─── Chọn 1 (đăng ký + evaluate lần 1)
 0:10 ─── Chờ upload tài liệu (~2 phút)

@@ -12,10 +12,20 @@ echo "  MSSV: B22DCVT415"
 echo "============================================================"
 echo ""
 
+# Xác định lệnh Python
+if command -v python3 &>/dev/null; then
+    PY_CMD="python3"
+elif command -v python &>/dev/null; then
+    PY_CMD="python"
+else
+    echo "❌ Không tìm thấy Python! Vui lòng cài đặt Python (phiên bản 3.8 trở lên)."
+    exit 1
+fi
+
 # 1. Tạo Virtual Environment
 echo "[1/4] Tạo Virtual Environment..."
 if [ ! -d ".venv" ]; then
-    python3 -m venv .venv
+    $PY_CMD -m venv .venv
     echo "  ✅ Đã tạo .venv"
 else
     echo "  ⏩ .venv đã tồn tại, bỏ qua"
@@ -24,7 +34,7 @@ fi
 # 2. Kích hoạt venv
 echo "[2/4] Kích hoạt .venv..."
 source .venv/bin/activate
-echo "  ✅ Python: $(which python3)"
+echo "  ✅ Python: $(which python)"
 
 # 3. Cài dependencies
 echo "[3/4] Cài đặt dependencies..."
@@ -37,7 +47,7 @@ echo "[4/4] Tải model keepitreal/vietnamese-sbert..."
 if [ -d "models/vietnamese-sbert" ]; then
     echo "  ⏩ Model sbert đã có sẵn, bỏ qua"
 else
-    python3 -c "
+    python -c "
 from sentence_transformers import SentenceTransformer
 import os
 print('  Đang tải từ HuggingFace...')
@@ -56,7 +66,7 @@ echo "[5/5] Tải model backup intfloat/multilingual-e5-large (~1.2GB)..."
 if [ -d "models/multilingual-e5-large" ]; then
     echo "  ⏩ Model E5-Large đã có sẵn, bỏ qua"
 else
-    python3 -c "
+    python -c "
 from sentence_transformers import SentenceTransformer
 import os
 print('  Đang tải E5-Large từ HuggingFace (Có thể mất 5-10 phút)...')
@@ -73,6 +83,6 @@ echo "  ✅ SETUP HOÀN TẤT!"
 echo "============================================================"
 echo ""
 echo "  Bước tiếp theo:"
-echo "  Terminal 1:  source .venv/bin/activate && python3 student_server.py"
-echo "  Terminal 2:  source .venv/bin/activate && python3 run_competition.py"
+echo "  Terminal 1:  source .venv/bin/activate && python student_server.py"
+echo "  Terminal 2:  source .venv/bin/activate && python run_competition.py"
 echo ""
